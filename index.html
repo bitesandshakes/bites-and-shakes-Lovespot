@@ -4,146 +4,196 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bites & Shakes | Order Online</title>
+<title>Bites & Shakes - Order Online</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#fffaf5;color:#29231f}
-header{background:#29231f;color:white;padding:25px 16px;text-align:center}
-header h1{margin:0;color:#ffbd59;font-size:30px}
-header p{margin:8px 0 0}
-.container{max-width:850px;margin:auto;padding:18px}
-h2{margin-top:25px}
-.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
-.item{background:white;border-radius:13px;padding:15px;box-shadow:0 2px 12px #0001}
-.item h3{margin:5px 0}
-.price{font-weight:bold;color:#d66b17}
-button{border:0;border-radius:8px;padding:11px 15px;background:#e97924;color:white;font-weight:bold;cursor:pointer}
-.cart{background:white;padding:16px;border-radius:13px;margin-top:25px}
-input,textarea{width:100%;padding:12px;margin:7px 0 12px;border:1px solid #ddd;border-radius:8px;font:inherit}
-.cart-row{display:flex;justify-content:space-between;gap:10px;margin:12px 0}
-footer{text-align:center;padding:22px;background:#29231f;color:white;margin-top:30px}
-@media(max-width:450px){.menu{grid-template-columns:1fr}}
+body{margin:0;font-family:Arial;background:#fff8ed;color:#302016}
+header{background:#302016;color:white;text-align:center;padding:25px 10px}
+header h1{color:#ffc857;margin:0;font-size:32px}
+header p{margin-bottom:0}
+.hero{text-align:center;background:#ffe2aa;padding:25px 10px}
+.hero h2{margin:0 0 10px}
+.container{max-width:900px;margin:auto;padding:15px}
+.section-title{text-align:center;color:#8a3f18;margin:25px 0}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px}
+.item{background:white;padding:16px 10px;text-align:center;border-radius:14px;box-shadow:0 3px 10px #0001}
+.item h3{font-size:16px;min-height:36px}
+.price{font-weight:bold;color:#a64d1c;font-size:19px}
+button{border:0;background:#9b431b;color:white;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer}
+.item button{margin-top:10px}
+.cart{background:white;padding:18px;border-radius:14px;margin-top:25px;box-shadow:0 3px 10px #0001}
+.cart-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee;gap:10px}
+.qty button{padding:5px 10px}
+input,textarea,select{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #ccc;border-radius:8px;font-size:15px}
+.order-btn{width:100%;background:#168b48;font-size:17px;padding:14px;margin-top:10px}
+footer{background:#302016;color:white;text-align:center;padding:20px;margin-top:30px}
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>Bites & Shakes</h1>
-<p>SIP • BITE • SMILE</p>
-<p>Fresh Food. Happy Moments!</p>
+<h1>BITES & SHAKES</h1>
+<p>Fresh Food • Tasty Moments</p>
 </header>
 
-<main class="container">
-<h2>🍔 Our Menu</h2>
-<p>Select your favourite food and add to cart.</p>
+<div class="hero">
+<h2>Welcome to Bites & Shakes!</h2>
+<p>Order your favourite food online</p>
+<strong>Melapalayam Free Delivery</strong>
+</div>
+
+<div class="container">
+
+<h2 class="section-title">Our Food Menu</h2>
 <div class="menu" id="menu"></div>
 
-<section class="cart">
-<h2>🛒 Your Cart</h2>
-<div id="cart">Your cart is empty.</div>
-<h3 id="total">Total: ₹0</h3>
+<div class="cart">
+<h2>Your Cart 🛒</h2>
+<div id="cartItems">Your cart is empty.</div>
+<h2>Total: ₹<span id="total">0</span></h2>
 
 <h2>Delivery Details</h2>
-<input id="name" placeholder="Customer Name">
-<input id="phone" type="tel" placeholder="Mobile Number">
-<textarea id="address" placeholder="Full Delivery Address"></textarea>
 
-<p><b>Payment Method:</b> Cash on Delivery (COD)</p>
-<button onclick="placeOrder()" style="width:100%">
-Order via WhatsApp
+<label>Your Name</label>
+<input id="customer" placeholder="Enter your name">
+
+<label>Mobile Number</label>
+<input id="phone" type="tel" placeholder="Enter mobile number">
+
+<label>Delivery Address</label>
+<textarea id="address" rows="3" placeholder="Enter your full address"></textarea>
+
+<label>Payment Method</label>
+<select id="payment">
+<option>Cash on Delivery</option>
+</select>
+
+<button class="order-btn" onclick="placeOrder()">
+ORDER ON WHATSAPP
 </button>
-</section>
-</main>
+</div>
+</div>
 
 <footer>
+<h3>BITES & SHAKES</h3>
 <p>Door Delivery Available</p>
 <p>Melapalayam Free Delivery</p>
 <p>Contact: 7708306814</p>
 </footer>
 
 <script>
-const products = [
+const products=[
 {name:"Chicken Shawarma",price:90},
 {name:"Crispy Chicken Burger",price:110},
 {name:"French Fries",price:70},
+{name:"Chicken Sandwich",price:90},
 {name:"Milkshake",price:100},
-{name:"Tea",price:20}
+{name:"Chicken Fried Rice",price:120},
+{name:"Arabian Spl Sharja",price:140},
+{name:"Falooda",price:100}
 ];
 
-let cart = {};
+let cart={};
 
 function showMenu(){
-document.getElementById("menu").innerHTML=products.map((p,i)=>`
+const menu=document.getElementById("menu");
+menu.innerHTML="";
+products.forEach((p,i)=>{
+menu.innerHTML+=`
 <div class="item">
 <h3>${p.name}</h3>
-<p class="price">₹${p.price}</p>
-<button onclick="addItem(${i})">Add to Cart +</button>
-</div>`).join("");
+<div class="price">₹${p.price}</div>
+<button onclick="addItem(${i})">ADD TO CART</button>
+</div>`;
+});
 }
 
 function addItem(i){
 let p=products[i];
-cart[p.name]=(cart[p.name]||0)+1;
+if(!cart[i])cart[i]={qty:0};
+cart[i].qty++;
 showCart();
 }
 
-function changeQty(name,amount){
-cart[name]+=amount;
-if(cart[name]<=0) delete cart[name];
+function changeQty(i,n){
+cart[i].qty+=n;
+if(cart[i].qty<=0)delete cart[i];
 showCart();
 }
 
 function showCart(){
-let names=Object.keys(cart);
+let area=document.getElementById("cartItems");
 let total=0;
-if(!names.length){
-document.getElementById("cart").innerHTML="Your cart is empty.";
-}else{
-document.getElementById("cart").innerHTML=names.map(name=>{
-let p=products.find(x=>x.name===name);
-total+=p.price*cart[name];
-return `<div class="cart-row">
-<span>${name} × ${cart[name]}</span>
-<span>
-<button onclick="changeQty('${name}',-1)">−</button>
-<button onclick="changeQty('${name}',1)">+</button>
+area.innerHTML="";
+
+if(Object.keys(cart).length===0){
+area.innerHTML="Your cart is empty.";
+}
+
+Object.keys(cart).forEach(i=>{
+let p=products[i];
+let qty=cart[i].qty;
+total+=p.price*qty;
+area.innerHTML+=`
+<div class="cart-row">
+<span>${p.name}<br>₹${p.price} × ${qty}</span>
+<span class="qty">
+<button onclick="changeQty(${i},-1)">−</button>
+${qty}
+<button onclick="changeQty(${i},1)">+</button>
 </span>
 </div>`;
-}).join("");
-}
-document.getElementById("total").innerText="Total: ₹"+total;
+});
+
+document.getElementById("total").innerText=total;
 }
 
 function placeOrder(){
-let name=document.getElementById("name").value.trim();
+let ids=Object.keys(cart);
+
+if(ids.length===0){
+alert("Please add food items first!");
+return;
+}
+
+let name=document.getElementById("customer").value.trim();
 let phone=document.getElementById("phone").value.trim();
 let address=document.getElementById("address").value.trim();
-let names=Object.keys(cart);
 
-if(!names.length){alert("Please add food to your cart.");return;}
-if(!name||!phone||!address){alert("Please fill all delivery details.");return;}
-if(!/^[6-9][0-9]{9}$/.test(phone)){alert("Enter a valid 10-digit mobile number.");return;}
+if(!name||!phone||!address){
+alert("Please fill all delivery details!");
+return;
+}
+
+if(!/^[0-9]{10}$/.test(phone)){
+alert("Enter a valid 10-digit mobile number!");
+return;
+}
 
 let total=0;
-let message="*NEW ORDER - BITES & SHAKES*%0A";
-message+="--------------------%0A";
-message+="Name: "+name+"%0A";
-message+="Phone: "+phone+"%0A";
-message+="Address: "+address+"%0A%0A";
-message+="*ORDER ITEMS*%0A";
+let msg="*NEW ORDER - BITES & SHAKES*%0A%0A";
+msg+="Name: "+encodeURIComponent(name)+"%0A";
+msg+="Phone: "+encodeURIComponent(phone)+"%0A";
+msg+="Address: "+encodeURIComponent(address)+"%0A%0A";
+msg+="*ORDER ITEMS*%0A";
 
-names.forEach(n=>{
-let p=products.find(x=>x.name===n);
-total+=p.price*cart[n];
-message+=n+" x "+cart[n]+" = Rs."+(p.price*cart[n])+"%0A";
+ids.forEach(i=>{
+let p=products[i];
+let qty=cart[i].qty;
+total+=p.price*qty;
+msg+=encodeURIComponent(p.name)+" x "+qty+" = Rs."+(p.price*qty)+"%0A";
 });
-message+="%0A*Total: Rs."+total+"*%0A";
-message+="Payment: CASH ON DELIVERY";
-window.open("https://wa.me/917708306814?text="+encodeURIComponent(decodeURIComponent(message)),"_blank");
+
+msg+="%0A*TOTAL: Rs."+total+"*%0A";
+msg+="Payment: Cash on Delivery";
+
+window.open("https://wa.me/917708306814?text="+msg,"_blank");
 }
 
 showMenu();
-showCart();
 </script>
+
 </body>
 </html>
